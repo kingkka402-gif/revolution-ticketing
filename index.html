@@ -684,6 +684,12 @@ function openPwModal() {
   modal.style.display = 'flex';
   document.getElementById('pw-input').value = '';
   document.getElementById('pw-error').style.display = 'none';
+  // 오늘 날짜 기본값 세팅
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  document.getElementById('w-perfdate').value = `${yyyy}-${mm}-${dd}`;
   setTimeout(() => document.getElementById('pw-input').focus(), 100);
 }
 function closePwModal() {
@@ -709,6 +715,7 @@ function cancelWrite() {
 
 // ── 관리자 버튼 표시 (URL 파라미터 확인) ──
 if (new URLSearchParams(window.location.search).get('admin') === 'true') {
+  isAdmin = true;
   document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('admin-write-btn');
     if (btn) btn.style.display = 'inline-flex';
