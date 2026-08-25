@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; background: #0d1b2a; }
@@ -164,7 +166,7 @@
 
     /* ── ABOUT ── */
     .about-grid { display:grid; grid-template-columns:1fr 1.1fr; gap:6rem; align-items:start; }
-    .about-body {  font-size:clamp(0.95rem,1.2vw,1.08rem); font-weight:300; color:#a8b4c8; line-height:2.1; }
+    .about-body { font-size:clamp(0.95rem,1.2vw,1.08rem); font-weight:300; color:#a8b4c8; line-height:2.1; }
     .about-body p+p { margin-top:1.4rem; }
     .about-tags { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:2.5rem; }
     .about-tag {
@@ -228,11 +230,10 @@
     .detail-cat.sports { color:#00ff88; }
     .detail-ttl { font-family:'Outfit',sans-serif; font-weight:800; font-size:clamp(1.4rem,3vw,2rem); letter-spacing:-0.02em; margin-bottom:1rem; }
     .detail-meta { font-size:0.75rem; color:#4a5568; display:flex; gap:1.5rem; padding-bottom:2rem; border-bottom:1px solid #1e2d42; margin-bottom:2rem; }
-    .detail-body {  font-size:0.92rem; line-height:2.1; color:#a8b4c8; white-space:pre-line; margin-bottom:2.5rem; }
+    .detail-body { font-size:0.92rem; line-height:2.1; color:#a8b4c8; white-space:pre-line; margin-bottom:2.5rem; }
     .detail-imgs { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,160px)); gap:0.8rem; margin-bottom:2.5rem; }
     .detail-imgs img { width:160px; height:160px; object-fit:cover; border:1px solid #1e2d42; border-radius:3px; cursor:pointer; transition:transform 0.2s; }
     .detail-imgs img:hover { transform:scale(1.03); }
-    /* 이미지 확대 모달 */
     #img-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; cursor:pointer; }
     #img-modal.open { display:flex; }
     #img-modal img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:4px; }
@@ -247,28 +248,15 @@
     /* ── PRICE ── */
     .price-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
     .price-card { border:1px solid #1e2d42; padding:2.5rem; }
-    .price-card-title {
-      font-family:'Outfit',sans-serif; font-weight:800;
-      font-size:1.5rem; letter-spacing:-0.02em; text-transform:uppercase;
-      margin-bottom:0.3rem;
-    }
+    .price-card-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.5rem; letter-spacing:-0.02em; text-transform:uppercase; margin-bottom:0.3rem; }
     .price-card-title.concert { color:#00d4ff; }
     .price-card-title.sports { color:#00ff88; }
     .price-card-sub { font-size:0.78rem; color:#7a8fa8; margin-bottom:2rem; }
     .price-table { width:100%; border-collapse:collapse; }
-    .price-table th {
-      font-family:'Outfit',sans-serif; font-weight:600; font-size:0.62rem;
-      letter-spacing:0.18em; text-transform:uppercase; color:#4a5568;
-      padding:0.6rem 0; border-bottom:1px solid #1e2d42; text-align:left;
-    }
+    .price-table th { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color:#4a5568; padding:0.6rem 0; border-bottom:1px solid #1e2d42; text-align:left; }
     .price-table td { padding:1rem 0; border-bottom:1px solid #0d1117; font-size:0.85rem; color:#a8b4c8; vertical-align:top; }
     .price-table td:last-child { text-align:right; color:#e8eaf2; font-weight:600; }
-    .price-tag {
-      display:inline-block; font-family:'Outfit',sans-serif; font-weight:700;
-      font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;
-      padding:0.25rem 0.7rem; border:1px solid rgba(0,212,255,0.25); color:#00d4ff;
-      margin-right:0.4rem; margin-bottom:0.4rem;
-    }
+    .price-tag { display:inline-block; font-family:'Outfit',sans-serif; font-weight:700; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.7rem; border:1px solid rgba(0,212,255,0.25); color:#00d4ff; margin-right:0.4rem; margin-bottom:0.4rem; }
     .price-tag.green { border-color:rgba(0,255,136,0.25); color:#00ff88; }
     .price-note { font-size:0.75rem; color:#4a5568; margin-top:1.5rem; line-height:1.8; }
 
@@ -299,6 +287,9 @@
     .fi { opacity:0; transform:translateY(36px); transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
     .fi.vis { opacity:1; transform:translateY(0); }
     .fi.d1 { transition-delay:0.1s; } .fi.d2 { transition-delay:0.2s; } .fi.d3 { transition-delay:0.3s; }
+
+    /* ── 로딩 ── */
+    .loading-msg { padding:3rem; text-align:center; color:#4a5568; font-size:0.85rem; }
 
     /* ── 반응형 ── */
     @media(max-width:820px) {
@@ -364,12 +355,7 @@
       </div>
     </div>
   </section>
-
   <div class="marquee-wrap"><div class="marquee-track" id="marquee"></div></div>
-
-
-
-
   <footer>
     <div class="footer-inner">
       <div>
@@ -419,7 +405,6 @@
           <div class="about-card"><div class="card-num">01</div><div class="card-title">실시간 대응</div><div class="card-text">문의 주시면 2시간 이내로 접수 도와드립니다. 당일 오픈 공연도 접수 가능합니다.</div></div>
           <div class="about-card"><div class="card-num">02</div><div class="card-title">투명한 소통</div><div class="card-text">예매 성공·실패 여부를 즉각적으로 공유드립니다.</div></div>
           <div class="about-card"><div class="card-num">03</div><div class="card-title">100% 후불제</div><div class="card-text">먼저 용역 비용을 받지 않고 성공 시 용역 비용을 입금 받습니다.</div></div>
-
         </div>
       </div>
     </div>
@@ -448,7 +433,7 @@
       <hr class="sec-divider"/>
 
       <!-- 비밀번호 모달 -->
-      <div id="pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;display:none;align-items:center;justify-content:center;">
+      <div id="pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;align-items:center;justify-content:center;">
         <div style="background:#0d1b2a;border:1px solid #1e2d42;padding:2.5rem;width:min(400px,90vw);position:relative;">
           <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;margin-bottom:1.5rem;">관리자 확인</div>
           <input type="password" id="pw-input" placeholder="비밀번호 입력" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid #1e2d42;color:#dde6f0;padding:0.85rem 1rem;font-size:0.88rem;outline:none;margin-bottom:0.8rem;font-family:'Pretendard Variable',sans-serif;" onkeydown="if(event.key==='Enter')checkPw()" />
@@ -481,7 +466,6 @@
             <input id="w-title" placeholder="제목이 자동 생성됩니다" style="background:rgba(255,255,255,0.04);border:1px solid #1e2d42;color:#dde6f0;padding:0.85rem 1rem;font-size:0.85rem;outline:none;font-family:'Pretendard Variable',sans-serif;width:100%;" />
           </div>
         </div>
-        <!-- 구조화 필드 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;">
           <div>
             <div style="font-size:0.72rem;color:#7a8fa8;margin-bottom:0.4rem;">예매처</div>
@@ -537,7 +521,7 @@
       <!-- 목록 -->
       <div id="rv-list-wrap">
         <div class="review-header"><span>번호</span><span>제목</span><span>날짜</span><span>조회</span></div>
-        <div class="review-list" id="rv-list"></div>
+        <div class="review-list" id="rv-list"><div class="loading-msg">불러오는 중...</div></div>
       </div>
       <!-- 상세 -->
       <div class="review-detail" id="rv-detail">
@@ -571,7 +555,6 @@
       <h2 class="sec-title fi">예매처 & 가격표</h2>
       <hr class="sec-divider"/>
       <div class="price-grid">
-        <!-- 콘서트 -->
         <div class="price-card fi">
           <div class="price-card-title concert">Concert</div>
           <div class="price-card-sub">콘서트 · 팬미팅 · 뮤지컬</div>
@@ -592,7 +575,6 @@
           </table>
           <div class="price-note">※ 선예매·일반예매 모두 가능<br/>※ 정확한 수수료는 문의 후 안내드립니다</div>
         </div>
-        <!-- 스포츠 -->
         <div class="price-card fi d1">
           <div class="price-card-title sports">Sports</div>
           <div class="price-card-sub">KBO · 축구 · 농구 · 올스타 · 가을야구</div>
@@ -613,7 +595,6 @@
           <div class="price-note">※ 주말·공휴일 기준 적용<br/>※ 인기 경기·플레이오프는 별도 문의</div>
         </div>
       </div>
-      <!-- 문의 CTA -->
       <div style="text-align:center;margin-top:4rem;" class="fi">
         <p style="font-size:0.88rem;color:#7a8fa8;margin-bottom:1.5rem;">정확한 수수료는 문의 주시면 바로 안내해드립니다</p>
         <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -668,23 +649,70 @@
 
 <script>
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 기본 후기 데이터 없음 (직접 작성)
+// Supabase 초기화
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const defaultReviews = [];
+const SUPABASE_URL = 'https://mitwzcfrynjnsfgtlotd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_J9iX4F05dEQV4JNWzn6WgA_IRPWSt_u';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// localStorage에서 저장된 후기 불러오기
-let reviews = JSON.parse(localStorage.getItem('rt_reviews') || 'null') || defaultReviews;
+let reviews = [];
 let rvFilter = 'all';
-let rvViews = JSON.parse(localStorage.getItem('rt_v2') || '{}');
 let isAdmin = false;
+let currentDetailId = null;
 
-// ── 비밀번호 모달 ──
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Supabase CRUD
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function fetchReviews() {
+  const list = document.getElementById('rv-list');
+  list.innerHTML = '<div class="loading-msg">불러오는 중...</div>';
+  let query = sb.from('reviews').select('*').order('created_at', { ascending: false });
+  if (rvFilter !== 'all') query = query.eq('category', rvFilter);
+  const { data, error } = await query;
+  if (error) {
+    list.innerHTML = '<div class="loading-msg">불러오기 실패. 새로고침 해주세요.</div>';
+    return;
+  }
+  reviews = data || [];
+  renderReviews();
+}
+
+async function insertReview(review) {
+  const { data, error } = await sb.from('reviews').insert([review]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+async function updateReview(id, updates) {
+  const { error } = await sb.from('reviews').update(updates).eq('id', id);
+  if (error) throw error;
+}
+
+async function deleteReviewDB(id) {
+  const { error } = await sb.from('reviews').delete().eq('id', id);
+  if (error) throw error;
+}
+
+async function incrementViews(id, currentViews) {
+  await sb.from('reviews').update({ views: (currentViews || 0) + 1 }).eq('id', id);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 관리자
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+if (new URLSearchParams(window.location.search).get('admin') === 'true') {
+  isAdmin = true;
+  window.addEventListener('load', () => {
+    const btn = document.getElementById('admin-write-btn');
+    if (btn) btn.style.display = 'inline-flex';
+  });
+}
+
 function openPwModal() {
   const modal = document.getElementById('pw-modal');
   modal.style.display = 'flex';
   document.getElementById('pw-input').value = '';
   document.getElementById('pw-error').style.display = 'none';
-  // 오늘 날짜 기본값 세팅
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth()+1).padStart(2,'0');
@@ -710,57 +738,37 @@ function checkPw() {
 }
 function cancelWrite() {
   document.getElementById('write-form').style.display = 'none';
-  isAdmin = false;
 }
 
-// ── 관리자 버튼 표시 (URL 파라미터 확인) ──
-if (new URLSearchParams(window.location.search).get('admin') === 'true') {
-  isAdmin = true;
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('admin-write-btn');
-    if (btn) btn.style.display = 'inline-flex';
-  });
-  window.addEventListener('load', () => {
-    const btn = document.getElementById('admin-write-btn');
-    if (btn) btn.style.display = 'inline-flex';
-  });
-}
-
-
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 이미지
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function openImgModal(src) {
   document.getElementById('img-modal-src').src = src;
   document.getElementById('img-modal').classList.add('open');
 }
-
 
 function updateAutoTitle() {
   const perfname = document.getElementById('w-perfname').value.trim();
   const perfdate = document.getElementById('w-perfdate').value;
   const cat = document.getElementById('w-cat').value;
   const catLabel = cat === 'concert' ? '공연' : '경기';
-
   if (!perfname && !perfdate) return;
-
   let dateStr = '';
   if (perfdate) {
     const d = new Date(perfdate);
     dateStr = `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} `;
   }
-  const title = `${dateStr}${perfname} ${catLabel} 예매 후기`.trim();
-  document.getElementById('w-title').value = title;
+  document.getElementById('w-title').value = `${dateStr}${perfname} ${catLabel} 예매 후기`.trim();
 }
-
 
 const CLOUD_NAME = 'pp4gwhlv';
 const UPLOAD_PRESET = 'revolution_ticketing';
-let uploadedImageUrls = [];
 
 function previewImages(input) {
   const preview = document.getElementById('img-preview');
   preview.innerHTML = '';
-  uploadedImageUrls = [];
-  const files = Array.from(input.files);
-  files.forEach((file, idx) => {
+  Array.from(input.files).forEach((file, idx) => {
     const reader = new FileReader();
     reader.onload = e => {
       const div = document.createElement('div');
@@ -781,6 +789,9 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 후기 제출
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function submitReview() {
   const title = document.getElementById('w-title').value.trim();
   const cat = document.getElementById('w-cat').value;
@@ -796,7 +807,6 @@ async function submitReview() {
 
   if (!title) { alert('제목을 입력해주세요.'); return; }
 
-  // 본문 자동 생성
   let body = '';
   if (platform) body += `📌 예매처 : ${platform}\n`;
   if (perfdate) {
@@ -808,7 +818,6 @@ async function submitReview() {
   if (success || fail) body += `✅ 성공 ${success||0}명 / ❌ 실패 ${fail||0}명\n`;
   if (extraBody) body += `\n${extraBody}`;
 
-  // 사진 업로드
   let images = [];
   if (files && files.length > 0) {
     document.getElementById('img-uploading').style.display = 'block';
@@ -825,109 +834,99 @@ async function submitReview() {
   const today = new Date();
   const date = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
 
-  if (editId) {
-    // 수정 모드
-    const idx = reviews.findIndex(r => r.id === parseInt(editId));
-    if (idx !== -1) {
-      reviews[idx] = { ...reviews[idx], category: cat, title, body, images: images.length > 0 ? images : reviews[idx].images };
+  try {
+    if (editId) {
+      const updateData = { category: cat, title, body };
+      if (images.length > 0) updateData.images = images;
+      await updateReview(parseInt(editId), updateData);
+      alert('수정되었습니다!');
+    } else {
+      await insertReview({ category: cat, title, date, body, images, views: 0 });
+      alert('후기가 등록되었습니다!');
     }
-  } else {
-    // 새 글
-    const newId = reviews.length > 0 ? Math.max(...reviews.map(r => r.id)) + 1 : 1;
-    reviews.push({ id: newId, category: cat, title, date, body, images });
+  } catch(e) {
+    alert('저장 중 오류가 발생했습니다: ' + e.message);
+    return;
   }
 
-  localStorage.setItem('rt_reviews', JSON.stringify(reviews));
-
   // 폼 초기화
-  document.getElementById('w-title').value = '';
-  document.getElementById('w-perfname').value = '';
+  ['w-title','w-perfname','w-perftime','w-body'].forEach(id => document.getElementById(id).value = '');
+  ['w-total','w-success','w-fail'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('w-perfdate').value = '';
-  document.getElementById('w-perftime').value = '';
-  document.getElementById('w-total').value = '';
-  document.getElementById('w-success').value = '';
-  document.getElementById('w-fail').value = '';
-  document.getElementById('w-body').value = '';
   document.getElementById('w-imgs').value = '';
   document.getElementById('w-edit-id').value = '';
   document.getElementById('img-preview').innerHTML = '';
   document.getElementById('write-form').style.display = 'none';
   document.getElementById('write-form-title').textContent = '새 후기 작성';
 
-  renderReviews();
-  alert(editId ? '수정되었습니다!' : '후기가 등록되었습니다!');
+  await fetchReviews();
 }
 
 function openEditForm() {
-  const id = parseInt(document.getElementById('w-edit-id').dataset.currentId || 0);
-  const p = reviews.find(r => r.id === id);
+  const p = reviews.find(r => r.id === currentDetailId);
   if (!p) return;
-
   document.getElementById('w-edit-id').value = p.id;
   document.getElementById('w-cat').value = p.category;
   document.getElementById('w-title').value = p.title;
   document.getElementById('w-body').value = p.body;
   document.getElementById('write-form-title').textContent = '후기 수정';
   document.getElementById('write-form').style.display = 'block';
-
   document.getElementById('rv-list-wrap').classList.remove('hidden');
   document.getElementById('rv-detail').classList.remove('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── 목록 렌더 ──
-function getRvFiltered() {
-  return rvFilter === 'all' ? reviews : reviews.filter(p => p.category === rvFilter);
-}
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 목록 렌더
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderReviews() {
   const list = document.getElementById('rv-list');
-  const filtered = getRvFiltered().slice().reverse();
-  if (filtered.length === 0) {
-    list.innerHTML = '<div style="padding:3rem;text-align:center;color:#4a5568;font-size:0.85rem;">아직 등록된 후기가 없습니다.</div>';
+  if (reviews.length === 0) {
+    list.innerHTML = '<div class="loading-msg">아직 등록된 후기가 없습니다.</div>';
     return;
   }
-  list.innerHTML = filtered.map((p, i) => {
-    const v = rvViews[p.id] || 0;
+  list.innerHTML = reviews.map((p, i) => {
     const delBtn = isAdmin ? `<button onclick="event.stopPropagation();deleteReview(${p.id})" style="background:transparent;border:1px solid rgba(255,100,100,0.3);color:#ff6b6b;font-size:0.65rem;padding:0.3rem 0.7rem;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;">삭제</button>` : '';
-    return `<div class="review-item" onclick="showRvDetail(${p.id})" style="grid-template-columns:50px 1fr 90px 70px ${isAdmin ? '60px' : ''};">
-      <div class="ri-num">${filtered.length - i}</div>
+    return `<div class="review-item" onclick="showRvDetail(${p.id})">
+      <div class="ri-num">${reviews.length - i}</div>
       <div><div class="ri-cat ${p.category}">${p.category === 'concert' ? 'Concert' : 'Sports'}</div><div class="ri-title">${p.title}</div></div>
       <div class="ri-date">${p.date}</div>
-      <div class="ri-views">👁 ${v}</div>
+      <div class="ri-views">👁 ${p.views || 0}</div>
       ${delBtn}
     </div>`;
   }).join('');
 }
 
-function deleteReview(id) {
+async function deleteReview(id) {
   if (!isAdmin) return;
   if (!confirm('이 후기를 삭제할까요?')) return;
-  reviews = reviews.filter(r => r.id !== id);
-  localStorage.setItem('rt_reviews', JSON.stringify(reviews));
-  renderReviews();
+  try {
+    await deleteReviewDB(id);
+    await fetchReviews();
+  } catch(e) {
+    alert('삭제 실패: ' + e.message);
+  }
 }
 
-function showRvDetail(id) {
+async function showRvDetail(id) {
   const p = reviews.find(x => x.id === id);
   if (!p) return;
-  rvViews[id] = (rvViews[id] || 0) + 1;
-  localStorage.setItem('rt_v2', JSON.stringify(rvViews));
+  currentDetailId = id;
+
+  // 조회수 증가
+  await incrementViews(id, p.views);
+  p.views = (p.views || 0) + 1;
+
   document.getElementById('rv-d-cat').className = `detail-cat ${p.category}`;
   document.getElementById('rv-d-cat').textContent = p.category === 'concert' ? '🎵 콘서트' : '⚾ 스포츠';
   document.getElementById('rv-d-ttl').textContent = p.title;
   document.getElementById('rv-d-date').textContent = p.date;
-  document.getElementById('rv-d-views').textContent = `조회 ${rvViews[id]}`;
-  document.getElementById('rv-d-body').textContent = p.body;
-  document.getElementById('rv-d-imgs').innerHTML = p.images.map(s => `<img src="${s}" alt="후기 이미지" onclick="openImgModal('${s}')" />`).join('');
+  document.getElementById('rv-d-views').textContent = `조회 ${p.views}`;
+  document.getElementById('rv-d-body').textContent = p.body || '';
+  document.getElementById('rv-d-imgs').innerHTML = (p.images || []).map(s => `<img src="${s}" alt="후기 이미지" onclick="openImgModal('${s}')" />`).join('');
 
-  // 수정 버튼 — 관리자일 때만 표시
   const editBtn = document.getElementById('edit-btn');
-  if (isAdmin) {
-    editBtn.style.display = 'inline-flex';
-    document.getElementById('w-edit-id').dataset.currentId = id;
-  } else {
-    editBtn.style.display = 'none';
-  }
+  editBtn.style.display = isAdmin ? 'inline-flex' : 'none';
 
   document.getElementById('rv-list-wrap').classList.add('hidden');
   document.getElementById('rv-detail').classList.add('show');
@@ -937,17 +936,18 @@ function showRvDetail(id) {
 function showRvList() {
   document.getElementById('rv-list-wrap').classList.remove('hidden');
   document.getElementById('rv-detail').classList.remove('show');
-  renderReviews();
 }
 
-function filterReview(cat, btn) {
+async function filterReview(cat, btn) {
   rvFilter = cat;
   document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderReviews();
+  await fetchReviews();
 }
 
-// ── 페이지 전환 ──
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 페이지 전환
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function goPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -955,7 +955,7 @@ function goPage(name) {
   const map = { about:0, reviews:1, price:2, contact:3 };
   if (map[name] !== undefined) document.querySelectorAll('.nav-btn')[map[name]].classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (name === 'reviews') renderReviews();
+  if (name === 'reviews') fetchReviews();
   initFI();
 }
 
