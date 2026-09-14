@@ -215,6 +215,7 @@
       cursor:pointer; transition:background 0.3s;
     }
     .review-item:hover { background:#111827; }
+    .review-item.open { background:#111827; border-left:2px solid #00d4ff; }
     .ri-num { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.72rem; color:#4a5568; text-align:center; }
     .ri-cat { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:0.28rem; }
     .ri-cat.concert { color:#00d4ff; }
@@ -222,21 +223,13 @@
     .ri-title { font-weight:600; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .ri-date { font-family:'Outfit',sans-serif; font-size:0.7rem; color:#4a5568; text-align:right; }
     .ri-views { font-family:'Outfit',sans-serif; font-size:0.7rem; color:#4a5568; text-align:right; }
-    .review-detail { display:none; }
-    .review-detail.show { display:block; }
-    .review-list-wrap.hidden { display:none; }
-    .detail-cat { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.65rem; letter-spacing:0.22em; text-transform:uppercase; margin-bottom:0.8rem; }
-    .detail-cat.concert { color:#00d4ff; }
-    .detail-cat.sports { color:#00ff88; }
-    .detail-ttl { font-family:'Outfit',sans-serif; font-weight:800; font-size:clamp(1.4rem,3vw,2rem); letter-spacing:-0.02em; margin-bottom:1rem; }
-    .detail-meta { font-size:0.75rem; color:#4a5568; display:flex; gap:1.5rem; padding-bottom:2rem; border-bottom:1px solid #1e2d42; margin-bottom:2rem; }
-    .detail-body { font-size:0.92rem; line-height:2.1; color:#a8b4c8; white-space:pre-line; margin-bottom:2.5rem; }
-    .detail-imgs { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,160px)); gap:0.8rem; margin-bottom:2.5rem; }
-    .detail-imgs img { width:160px; height:160px; object-fit:cover; border:1px solid #1e2d42; border-radius:3px; cursor:pointer; transition:transform 0.2s; }
-    .detail-imgs img:hover { transform:scale(1.03); }
-    #img-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; cursor:pointer; }
-    #img-modal.open { display:flex; }
-    #img-modal img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:4px; }
+    .rv-inline-detail {
+      display:none; background:#0a1624;
+      border-bottom:1px solid #1e2d42;
+      border-left:2px solid #00d4ff;
+      padding:2rem 1.6rem;
+      animation: fadeUp 0.3s ease forwards;
+    }
     .back-btn {
       font-family:'Outfit',sans-serif; font-weight:600; font-size:0.72rem;
       letter-spacing:0.15em; text-transform:uppercase;
@@ -373,6 +366,7 @@
         <div class="footer-col-title">Contact</div>
         <a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a>
         <a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a>
+        <a href="https://blog.naver.com/starking985" target="_blank" class="footer-link">네이버 블로그</a>
         <a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a>
       </div>
     </div>
@@ -405,7 +399,7 @@
           <div class="about-card"><div class="card-num">01</div><div class="card-title">실시간 대응</div><div class="card-text">문의 주시면 2시간 이내로 접수 도와드립니다. 당일 오픈 공연도 접수 가능합니다.</div></div>
           <div class="about-card"><div class="card-num">02</div><div class="card-title">투명한 소통</div><div class="card-text">예매 성공·실패 여부를 즉각적으로 공유드립니다.</div></div>
           <div class="about-card"><div class="card-num">03</div><div class="card-title">100% 후불제</div><div class="card-text">먼저 용역 비용을 받지 않고 성공 시 용역 비용을 입금 받습니다.</div></div>
-               <div class="about-card"><div class="card-num">04</div><div class="card-title">소수 인원 진행</div><div class="card-text">대다수를 받는 방식이 아닌 소수의 인원만 받아 모든 의뢰자분께 100% 성공률에 도전해드립니다.</div></div>     
+          <div class="about-card"><div class="card-num">04</div><div class="card-title">소수 인원 진행</div><div class="card-text">대다수를 받는 방식이 아닌 소수의 인원만 받아 모든 의뢰자분께 100% 성공률에 도전해드립니다.</div></div>
         </div>
       </div>
     </div>
@@ -414,7 +408,7 @@
     <div class="footer-inner">
       <div><div class="footer-logo">REVOLUTION<span></span></div><div class="footer-desc">콘서트 · 스포츠 티켓팅 대행 서비스</div></div>
       <div><div class="footer-col-title">Menu</div><button class="footer-link" onclick="goPage('about')">회사소개</button><button class="footer-link" onclick="goPage('reviews')">티켓팅 후기</button><button class="footer-link" onclick="goPage('price')">예매처 & 가격표</button><button class="footer-link" onclick="goPage('contact')">문의하기</button></div>
-      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
+      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://blog.naver.com/starking985" target="_blank" class="footer-link">네이버 블로그</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Revolution Ticketing. All rights reserved.</span><span>콘서트 · 스포츠 티켓팅 대행</span></div>
   </footer>
@@ -524,25 +518,13 @@
         <div class="review-header"><span>번호</span><span>제목</span><span>날짜</span><span>조회</span></div>
         <div class="review-list" id="rv-list"><div class="loading-msg">불러오는 중...</div></div>
       </div>
-      <!-- 상세 -->
-      <div class="review-detail" id="rv-detail">
-        <div class="detail-cat" id="rv-d-cat"></div>
-        <div class="detail-ttl" id="rv-d-ttl"></div>
-        <div class="detail-meta"><span id="rv-d-date"></span><span id="rv-d-views"></span></div>
-        <div class="detail-body" id="rv-d-body"></div>
-        <div class="detail-imgs" id="rv-d-imgs"></div>
-        <div style="display:flex;gap:0.8rem;margin-top:1rem;">
-          <button class="back-btn" onclick="showRvList()">← 목록으로</button>
-          <button id="edit-btn" class="back-btn" style="display:none;border-color:rgba(0,212,255,0.3);color:#00d4ff;" onclick="openEditForm()">✏️ 수정</button>
-        </div>
-      </div>
     </div>
   </section>
   <footer>
     <div class="footer-inner">
       <div><div class="footer-logo">REVOLUTION<span></span></div><div class="footer-desc">콘서트 · 스포츠 티켓팅 대행 서비스</div></div>
       <div><div class="footer-col-title">Menu</div><button class="footer-link" onclick="goPage('about')">회사소개</button><button class="footer-link" onclick="goPage('reviews')">티켓팅 후기</button><button class="footer-link" onclick="goPage('price')">예매처 & 가격표</button><button class="footer-link" onclick="goPage('contact')">문의하기</button></div>
-      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
+      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://blog.naver.com/starking985" target="_blank" class="footer-link">네이버 블로그</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Revolution Ticketing. All rights reserved.</span><span>콘서트 · 스포츠 티켓팅 대행</span></div>
   </footer>
@@ -609,7 +591,7 @@
     <div class="footer-inner">
       <div><div class="footer-logo">REVOLUTION<span></span></div><div class="footer-desc">콘서트 · 스포츠 티켓팅 대행 서비스</div></div>
       <div><div class="footer-col-title">Menu</div><button class="footer-link" onclick="goPage('about')">회사소개</button><button class="footer-link" onclick="goPage('reviews')">티켓팅 후기</button><button class="footer-link" onclick="goPage('price')">예매처 & 가격표</button><button class="footer-link" onclick="goPage('contact')">문의하기</button></div>
-      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
+      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://blog.naver.com/starking985" target="_blank" class="footer-link">네이버 블로그</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Revolution Ticketing. All rights reserved.</span><span>콘서트 · 스포츠 티켓팅 대행</span></div>
   </footer>
@@ -628,6 +610,7 @@
         </div>
         <div class="contact-extra">
           X(트위터)로도 문의 가능 → <a href="https://x.com/Lucky401_ticket" target="_blank">@Lucky401_ticket</a><br/>
+          네이버 블로그 후기 보기 → <a href="https://blog.naver.com/starking985" target="_blank">blog.naver.com/starking985</a><br/>
           운영시간 안내는 오픈채팅 공지를 확인해 주세요
         </div>
       </div>
@@ -637,21 +620,18 @@
     <div class="footer-inner">
       <div><div class="footer-logo">REVOLUTION<span></span></div><div class="footer-desc">콘서트 · 스포츠 티켓팅 대행 서비스</div></div>
       <div><div class="footer-col-title">Menu</div><button class="footer-link" onclick="goPage('about')">회사소개</button><button class="footer-link" onclick="goPage('reviews')">티켓팅 후기</button><button class="footer-link" onclick="goPage('price')">예매처 & 가격표</button><button class="footer-link" onclick="goPage('contact')">문의하기</button></div>
-      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
+      <div><div class="footer-col-title">Contact</div><a href="https://open.kakao.com/o/sH956WCi" target="_blank" class="footer-link">카카오 오픈채팅 (콘서트)</a><a href="https://open.kakao.com/o/sHSlcdHi" target="_blank" class="footer-link">카카오 오픈채팅 (스포츠)</a><a href="https://blog.naver.com/starking985" target="_blank" class="footer-link">네이버 블로그</a><a href="https://x.com/Lucky401_ticket" target="_blank" class="footer-link">X (트위터)</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Revolution Ticketing. All rights reserved.</span><span>콘서트 · 스포츠 티켓팅 대행</span></div>
   </footer>
 </div>
 
 <!-- 이미지 확대 모달 -->
-<div id="img-modal" onclick="this.classList.remove('open')">
-  <img id="img-modal-src" src="" alt="확대 이미지" />
+<div id="img-modal" onclick="this.classList.remove('open')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;cursor:pointer;">
+  <img id="img-modal-src" src="" alt="확대 이미지" style="max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px;" />
 </div>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Supabase 초기화
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SUPABASE_URL = 'https://mitwzcfrynjnsfgtlotd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J9iX4F05dEQV4JNWzn6WgA_IRPWSt_u';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -661,9 +641,6 @@ let rvFilter = 'all';
 let isAdmin = false;
 let currentDetailId = null;
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Supabase CRUD
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function fetchReviews() {
   const list = document.getElementById('rv-list');
   list.innerHTML = '<div class="loading-msg">불러오는 중...</div>';
@@ -698,9 +675,6 @@ async function incrementViews(id, currentViews) {
   await sb.from('reviews').update({ views: (currentViews || 0) + 1 }).eq('id', id);
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 관리자
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if (new URLSearchParams(window.location.search).get('admin') === 'true') {
   isAdmin = true;
   window.addEventListener('load', () => {
@@ -741,12 +715,10 @@ function cancelWrite() {
   document.getElementById('write-form').style.display = 'none';
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 이미지
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function openImgModal(src) {
   document.getElementById('img-modal-src').src = src;
-  document.getElementById('img-modal').classList.add('open');
+  const modal = document.getElementById('img-modal');
+  modal.style.display = 'flex';
 }
 
 function updateAutoTitle() {
@@ -790,9 +762,6 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 후기 제출
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function submitReview() {
   const title = document.getElementById('w-title').value.trim();
   const cat = document.getElementById('w-cat').value;
@@ -850,7 +819,6 @@ async function submitReview() {
     return;
   }
 
-  // 폼 초기화
   ['w-title','w-perfname','w-perftime','w-body'].forEach(id => document.getElementById(id).value = '');
   ['w-total','w-success','w-fail'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('w-perfdate').value = '';
@@ -872,13 +840,11 @@ function openEditForm() {
   document.getElementById('w-body').value = p.body;
   document.getElementById('write-form-title').textContent = '후기 수정';
   document.getElementById('write-form').style.display = 'block';
-  document.getElementById('rv-list-wrap').classList.remove('hidden');
-  document.getElementById('rv-detail').classList.remove('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 목록 렌더
+// 아코디언 목록 렌더
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderReviews() {
   const list = document.getElementById('rv-list');
@@ -887,15 +853,60 @@ function renderReviews() {
     return;
   }
   list.innerHTML = reviews.map((p, i) => {
-    const delBtn = isAdmin ? `<button onclick="event.stopPropagation();deleteReview(${p.id})" style="background:transparent;border:1px solid rgba(255,100,100,0.3);color:#ff6b6b;font-size:0.65rem;padding:0.3rem 0.7rem;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;">삭제</button>` : '';
-    return `<div class="review-item" onclick="showRvDetail(${p.id})">
-      <div class="ri-num">${reviews.length - i}</div>
-      <div><div class="ri-cat ${p.category}">${p.category === 'concert' ? 'Concert' : 'Sports'}</div><div class="ri-title">${p.title}</div></div>
-      <div class="ri-date">${p.date}</div>
-      <div class="ri-views">👁 ${p.views || 0}</div>
-      ${delBtn}
-    </div>`;
+    const delBtn = isAdmin
+      ? `<button onclick="event.stopPropagation();deleteReview(${p.id})" style="background:transparent;border:1px solid rgba(255,100,100,0.3);color:#ff6b6b;font-size:0.65rem;padding:0.3rem 0.7rem;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;">삭제</button>`
+      : '';
+    const imgs = (p.images || []).map(s =>
+      `<img src="${s}" alt="후기 이미지" onclick="event.stopPropagation();openImgModal('${s}')" style="width:160px;height:160px;object-fit:cover;border:1px solid #1e2d42;border-radius:3px;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" />`
+    ).join('');
+    const editBtn = isAdmin
+      ? `<button onclick="event.stopPropagation();currentDetailId=${p.id};openEditForm()" style="background:transparent;border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-size:0.72rem;padding:0.7rem 1.5rem;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:0.1em;transition:all 0.3s;">✏️ 수정</button>`
+      : '';
+
+    return `
+      <div class="review-item" id="rv-item-${p.id}" onclick="toggleRvDetail(${p.id})">
+        <div class="ri-num">${reviews.length - i}</div>
+        <div><div class="ri-cat ${p.category}">${p.category === 'concert' ? 'Concert' : 'Sports'}</div><div class="ri-title">${p.title}</div></div>
+        <div class="ri-date">${p.date}</div>
+        <div class="ri-views">👁 ${p.views || 0}</div>
+        ${delBtn}
+      </div>
+      <div class="rv-inline-detail" id="rv-inline-${p.id}">
+        <div style="font-family:'Outfit',sans-serif;font-weight:600;font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.8rem;color:${p.category==='concert'?'#00d4ff':'#00ff88'};">${p.category === 'concert' ? '🎵 콘서트' : '⚾ 스포츠'}</div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:clamp(1.2rem,2.5vw,1.6rem);letter-spacing:-0.02em;margin-bottom:1rem;">${p.title}</div>
+        <div style="font-size:0.75rem;color:#4a5568;display:flex;gap:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #1e2d42;margin-bottom:1.5rem;">
+          <span>${p.date}</span><span id="rv-views-${p.id}">조회 ${p.views || 0}</span>
+        </div>
+        <div style="font-size:0.92rem;line-height:2.1;color:#a8b4c8;white-space:pre-line;margin-bottom:${(p.images||[]).length>0?'1.5rem':'0'};">${p.body || ''}</div>
+        ${imgs ? `<div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1.5rem;">${imgs}</div>` : ''}
+        <div style="display:flex;gap:0.8rem;margin-top:1rem;">${editBtn}</div>
+      </div>`;
   }).join('');
+}
+
+async function toggleRvDetail(id) {
+  const detailEl = document.getElementById('rv-inline-' + id);
+  const itemEl = document.getElementById('rv-item-' + id);
+  const isOpen = detailEl.style.display === 'block';
+
+  // 모두 닫기
+  document.querySelectorAll('.rv-inline-detail').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.review-item').forEach(el => el.classList.remove('open'));
+
+  if (isOpen) return;
+
+  const p = reviews.find(x => x.id === id);
+  if (!p) return;
+  currentDetailId = id;
+
+  await incrementViews(id, p.views);
+  p.views = (p.views || 0) + 1;
+  const viewsEl = document.getElementById('rv-views-' + id);
+  if (viewsEl) viewsEl.textContent = `조회 ${p.views}`;
+
+  detailEl.style.display = 'block';
+  itemEl.classList.add('open');
+  setTimeout(() => detailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
 }
 
 async function deleteReview(id) {
@@ -909,36 +920,6 @@ async function deleteReview(id) {
   }
 }
 
-async function showRvDetail(id) {
-  const p = reviews.find(x => x.id === id);
-  if (!p) return;
-  currentDetailId = id;
-
-  // 조회수 증가
-  await incrementViews(id, p.views);
-  p.views = (p.views || 0) + 1;
-
-  document.getElementById('rv-d-cat').className = `detail-cat ${p.category}`;
-  document.getElementById('rv-d-cat').textContent = p.category === 'concert' ? '🎵 콘서트' : '⚾ 스포츠';
-  document.getElementById('rv-d-ttl').textContent = p.title;
-  document.getElementById('rv-d-date').textContent = p.date;
-  document.getElementById('rv-d-views').textContent = `조회 ${p.views}`;
-  document.getElementById('rv-d-body').textContent = p.body || '';
-  document.getElementById('rv-d-imgs').innerHTML = (p.images || []).map(s => `<img src="${s}" alt="후기 이미지" onclick="openImgModal('${s}')" />`).join('');
-
-  const editBtn = document.getElementById('edit-btn');
-  editBtn.style.display = isAdmin ? 'inline-flex' : 'none';
-
-  document.getElementById('rv-list-wrap').classList.add('hidden');
-  document.getElementById('rv-detail').classList.add('show');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function showRvList() {
-  document.getElementById('rv-list-wrap').classList.remove('hidden');
-  document.getElementById('rv-detail').classList.remove('show');
-}
-
 async function filterReview(cat, btn) {
   rvFilter = cat;
   document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
@@ -946,9 +927,6 @@ async function filterReview(cat, btn) {
   await fetchReviews();
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 페이지 전환
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function goPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -960,12 +938,10 @@ function goPage(name) {
   initFI();
 }
 
-// ── 스크롤 nav ──
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// ── 마퀴 ──
 const mItems = ['Concert','Sports','Interpark NOL','YES24','Melon Ticket','Ticketlink','K-POP','Baseball','Soccer','Basketball','Fan Meeting','Musical','올스타전','가을야구'];
 const mTrack = document.getElementById('marquee');
 [...mItems,...mItems].forEach(t => {
@@ -975,7 +951,6 @@ const mTrack = document.getElementById('marquee');
   mTrack.appendChild(s);
 });
 
-// ── Canvas 배경 ──
 (function(){
   const c = document.getElementById('bg');
   const ctx = c.getContext('2d');
@@ -1004,7 +979,6 @@ const mTrack = document.getElementById('marquee');
   resize(); window.addEventListener('resize',resize); draw();
 })();
 
-// ── FadeIn Observer ──
 function initFI() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('vis'); obs.unobserve(e.target); } });
