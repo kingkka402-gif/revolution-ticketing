@@ -219,6 +219,8 @@
     .ri-num { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.72rem; color:#4a5568; text-align:center; }
     .ri-cat { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:0.28rem; }
     .ri-cat.concert { color:#00d4ff; }
+    .ri-cat.musical { color:#ff88ff; }
+    .ri-cat.fanmeeting { color:#ffcc00; }
     .ri-cat.sports { color:#00ff88; }
     .ri-title { font-weight:600; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .ri-date { font-family:'Outfit',sans-serif; font-size:0.7rem; color:#4a5568; text-align:right; }
@@ -447,6 +449,8 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;">
           <select id="w-cat" style="background:#0d1b2a;border:1px solid #1e2d42;color:#dde6f0;padding:0.85rem 1rem;font-size:0.85rem;outline:none;font-family:'Pretendard Variable',sans-serif;width:100%;" onchange="updateAutoTitle()">
             <option value="concert">🎵 콘서트</option>
+            <option value="musical">🎭 뮤지컬</option>
+            <option value="fanmeeting">🌟 팬미팅</option>
             <option value="sports">⚾ 스포츠</option>
           </select>
           <input id="w-perfname" placeholder="공연명 (예: 아이유, KBO 두산vs한화)" style="background:rgba(255,255,255,0.04);border:1px solid #1e2d42;color:#dde6f0;padding:0.85rem 1rem;font-size:0.85rem;outline:none;font-family:'Pretendard Variable',sans-serif;width:100%;" oninput="updateAutoTitle()" />
@@ -511,6 +515,8 @@
       <div class="review-tabs fi">
         <button class="rtab active" onclick="filterReview('all',this)">전체</button>
         <button class="rtab" onclick="filterReview('concert',this)">콘서트</button>
+        <button class="rtab" onclick="filterReview('musical',this)">뮤지컬</button>
+        <button class="rtab" onclick="filterReview('fanmeeting',this)">팬미팅</button>
         <button class="rtab" onclick="filterReview('sports',this)">스포츠</button>
       </div>
       <!-- 목록 -->
@@ -730,7 +736,7 @@ function updateAutoTitle() {
   const perfname = document.getElementById('w-perfname').value.trim();
   const perfdate = document.getElementById('w-perfdate').value;
   const cat = document.getElementById('w-cat').value;
-  const catLabel = cat === 'concert' ? '공연' : '경기';
+  const catLabel = { concert: '콘서트', musical: '뮤지컬', fanmeeting: '팬미팅', sports: '경기' }[cat] || '공연';
   if (!perfname && !perfdate) return;
   let dateStr = '';
   if (perfdate) {
@@ -871,13 +877,13 @@ function renderReviews() {
     return `
       <div class="review-item" id="rv-item-${p.id}" onclick="toggleRvDetail(${p.id})">
         <div class="ri-num">${reviews.length - i}</div>
-        <div><div class="ri-cat ${p.category}">${p.category === 'concert' ? 'Concert' : 'Sports'}</div><div class="ri-title">${p.title}</div></div>
+        <div><div class="ri-cat ${p.category}">${{concert:'Concert',musical:'Musical',fanmeeting:'Fan Meeting',sports:'Sports'}[p.category]||p.category}</div><div class="ri-title">${p.title}</div></div>
         <div class="ri-date">${p.date}</div>
         <div class="ri-views">👁 ${p.views || 0}</div>
         ${delBtn}
       </div>
       <div class="rv-inline-detail" id="rv-inline-${p.id}">
-        <div style="font-family:'Outfit',sans-serif;font-weight:600;font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.8rem;color:${p.category==='concert'?'#00d4ff':'#00ff88'};">${p.category === 'concert' ? '🎵 콘서트' : '⚾ 스포츠'}</div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:600;font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:0.8rem;color:${{concert:'#00d4ff',musical:'#ff88ff',fanmeeting:'#ffcc00',sports:'#00ff88'}[p.category]||'#00d4ff'};">${{concert:'🎵 콘서트',musical:'🎭 뮤지컬',fanmeeting:'🌟 팬미팅',sports:'⚾ 스포츠'}[p.category]||p.category}</div>
         <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:clamp(1.2rem,2.5vw,1.6rem);letter-spacing:-0.02em;margin-bottom:1rem;">${p.title}</div>
         <div style="font-size:0.75rem;color:#4a5568;display:flex;gap:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #1e2d42;margin-bottom:1.5rem;">
           <span>${p.date}</span><span id="rv-views-${p.id}">조회 ${p.views || 0}</span>
